@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Student extends Model
+class Student extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -19,7 +20,18 @@ class Student extends Model
         'dob',
         'email',
         'phone',
-        'course'
+        'course',
+        'password'
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -30,4 +42,24 @@ class Student extends Model
     protected $casts = [
         'dob' => 'date',
     ];
+
+    /**
+     * Get the courses enrolled by the student.
+     */
+    public function enrolledCourses()
+    {
+        return $this->belongsToMany(Course::class, 'student_courses', 'student_id', 'course_id')
+            ->withTimestamps()
+            ->withPivot('status', 'progress');
+    }
+    
+    /**
+     * Get the quizzes attempted by the student.
+     */
+    public function quizAttempts()
+    {
+        return $this->belongsToMany(Quiz::class, 'student_quizzes', 'student_id', 'quiz_id')
+            ->withTimestamps()
+            ->withPivot('score', 'status', 'attempt_count');
+    }
 } 

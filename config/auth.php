@@ -45,6 +45,16 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+        
+        'student' => [
+            'driver' => 'session',
+            'provider' => 'students',
+        ],
+        
+        'educator' => [
+            'driver' => 'session',
+            'provider' => 'educators',
+        ],
     ],
 
     /*
@@ -68,6 +78,16 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+
+        'students' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Student::class,
+        ],
+        
+        'educators' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Educator::class,
         ],
 
         // 'users' => [
@@ -94,6 +114,18 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+        
+        'students' => [
+            'provider' => 'students',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+        
+        'educators' => [
+            'provider' => 'educators',
             'table' => 'password_resets',
             'expire' => 60,
         ],
